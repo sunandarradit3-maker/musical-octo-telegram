@@ -1,0 +1,10 @@
+{
+  "name": "TemuinHP — Recovery Center",
+  "short_name": "TemuinHP",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#07090d",
+  "theme_color": "#07090d",
+  "description": "Pusat pemulihan perangkat hilang dengan akses ke layanan resmi.",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
