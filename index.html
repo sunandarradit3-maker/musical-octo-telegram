@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#07090d" />
+  <meta name="description" content="Pusat pemulihan HP hilang: akses cepat layanan resmi Google, Apple, dan Samsung serta catatan laporan kehilangan." />
+  <title>TemuinHP — Recovery Center</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="TemuinHP beranda">
+      <span class="brand-mark">T</span>
+      <span>TemuinHP</span>
+      <span class="badge">SAFE</span>
+    </a>
+    <button class="ghost-btn" id="privacyBtn" type="button">Privasi</button>
+  </header>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse"></span> Recovery dashboard perangkat milik sendiri</div>
+        <h1>Cari HP hilang tanpa <span>tracker palsu.</span></h1>
+        <p>Nomor telepon saja tidak bisa membocorkan GPS live. TemuinHP menyatukan jalur resmi Google, Apple, dan Samsung plus checklist pengamanan agar kamu bisa bertindak cepat.</p>
+        <div class="hero-actions">
+          <a class="primary-btn" href="#recovery">Mulai pencarian</a>
+          <a class="secondary-btn" href="#report">Buat laporan</a>
+        </div>
+        <div class="trust-row">
+          <span>🔒 Data lokal</span><span>•</span><span>Tanpa akun TemuinHP</span><span>•</span><span>Tanpa server pelacak</span>
+        </div>
+      </div>
+      <div class="radar-card" aria-hidden="true">
+        <div class="radar">
+          <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+          <div class="sweep"></div>
+          <div class="pin"><span></span></div>
+        </div>
+        <div class="radar-footer">
+          <div><b>STATUS</b><span>Siap digunakan</span></div>
+          <div><b>MODE</b><span>Recovery resmi</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell warning-card">
+      <div class="warning-icon">!</div>
+      <div>
+        <h2>Jangan percaya situs “lacak lokasi dari nomor HP”</h2>
+        <p>Tanpa izin akun/perangkat/operator, sebuah website biasa tidak punya akses ke GPS perangkat hanya dari nomor telepon. Hindari memasukkan OTP, password, atau kode verifikasi ke situs yang menjanjikan hal itu.</p>
+      </div>
+    </section>
+
+    <section class="shell section" id="recovery">
+      <div class="section-heading">
+        <div><span class="kicker">01 — TRACK</span><h2>Pilih jalur pencarian</h2></div>
+        <p>Gunakan akun yang memang sudah terhubung ke HP yang hilang.</p>
+      </div>
+      <div class="service-grid">
+        <article class="service-card google">
+          <div class="service-icon">G</div>
+          <div class="service-title"><h3>Google Find Hub</h3><span>Android</span></div>
+          <p>Lihat lokasi/perkiraan terakhir, bunyikan, amankan, atau hapus perangkat Android yang terhubung ke Akun Google.</p>
+          <a href="https://android.com/find" target="_blank" rel="noreferrer noopener" class="service-link">Buka Find Hub <span>↗</span></a>
+        </article>
+        <article class="service-card apple">
+          <div class="service-icon">A</div>
+          <div class="service-title"><h3>Apple Find My</h3><span>iPhone / iPad</span></div>
+          <p>Buka Cari Perangkat di iCloud, aktifkan Mode Hilang, bunyikan perangkat, dan lihat lokasinya bila tersedia.</p>
+          <a href="https://www.icloud.com/find" target="_blank" rel="noreferrer noopener" class="service-link">Buka iCloud Find <span>↗</span></a>
+        </article>
+        <article class="service-card samsung">
+          <div class="service-icon">S</div>
+          <div class="service-title"><h3>SmartThings Find</h3><span>Samsung Galaxy</span></div>
+          <p>Temukan perangkat Galaxy yang terdaftar di Samsung Account, termasuk opsi lokasi terakhir dan offline finding bila sebelumnya aktif.</p>
+          <a href="https://smartthingsfind.samsung.com" target="_blank" rel="noreferrer noopener" class="service-link">Buka SmartThings Find <span>↗</span></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell two-col section">
+      <div class="panel">
+        <div class="panel-head"><span class="kicker">02 — DEVICE VAULT</span><span class="local-pill">LOCAL ONLY</span></div>
+        <h2>Simpan data perangkat</h2>
+        <p class="muted">Disimpan hanya di browser ini. Jangan masukkan password atau OTP.</p>
+        <form id="deviceForm" class="form-grid" autocomplete="off">
+          <label>Nama perangkat<input id="deviceName" placeholder="Contoh: Infinix Note 40" maxlength="60" /></label>
+          <label>Nomor HP<input id="phoneNumber" inputmode="tel" placeholder="08xxxxxxxxxx" maxlength="24" /></label>
+          <label>IMEI / serial<input id="imei" placeholder="Opsional" maxlength="40" /></label>
+          <label>Terakhir terlihat<input id="lastSeen" placeholder="Contoh: rumah / kampus / parkiran" maxlength="100" /></label>
+          <label class="wide">Catatan<textarea id="notes" rows="3" placeholder="Casing, warna, ciri khusus, waktu hilang..." maxlength="400"></textarea></label>
+          <div class="wide form-actions">
+            <button class="primary-btn" type="submit">Simpan di perangkat ini</button>
+            <button class="danger-ghost" id="clearData" type="button">Hapus data lokal</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="panel action-panel">
+        <span class="kicker">03 — FAST ACTIONS</span>
+        <h2>Tindakan cepat</h2>
+        <div class="quick-actions">
+          <button id="callBtn" class="quick-btn" type="button"><span>☎</span><div><b>Telepon HP</b><small>Coba dengarkan dering dari perangkat lain</small></div></button>
+          <button id="waBtn" class="quick-btn" type="button"><span>✉</span><div><b>Kirim pesan WhatsApp</b><small>Kirim pesan ke nomor HP yang hilang</small></div></button>
+          <button id="mapsBtn" class="quick-btn" type="button"><span>⌖</span><div><b>Buka lokasi terakhir</b><small>Cari catatan lokasi terakhir di Maps</small></div></button>
+          <button id="copyBtn" class="quick-btn" type="button"><span>⧉</span><div><b>Salin data perangkat</b><small>Untuk operator atau laporan kehilangan</small></div></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell section" id="report">
+      <div class="section-heading">
+        <div><span class="kicker">04 — RECOVERY PLAN</span><h2>Checklist kalau HP dicuri</h2></div>
+        <div class="progress-wrap"><span id="progressText">0/6 selesai</span><div class="progress"><i id="progressBar"></i></div></div>
+      </div>
+      <div class="checklist" id="checklist">
+        <label class="check-item"><input type="checkbox" data-step="find" /><span class="box"></span><div><b>1. Cek layanan pencarian resmi</b><p>Google Find Hub, Apple Find My, atau SmartThings Find.</p></div></label>
+        <label class="check-item"><input type="checkbox" data-step="lock" /><span class="box"></span><div><b>2. Kunci / tandai perangkat sebagai hilang</b><p>Tampilkan nomor kontak alternatif jika layanan mendukung.</p></div></label>
+        <label class="check-item"><input type="checkbox" data-step="sim" /><span class="box"></span><div><b>3. Hubungi operator seluler</b><p>Minta pemblokiran SIM/eSIM dan tanyakan proses penonaktifan berdasarkan IMEI.</p></div></label>
+        <label class="check-item"><input type="checkbox" data-step="accounts" /><span class="box"></span><div><b>4. Amankan akun penting</b><p>Ubah sandi akun utama bila ada indikasi perangkat sudah diakses orang lain.</p></div></label>
+        <label class="check-item"><input type="checkbox" data-step="report" /><span class="box"></span><div><b>5. Buat laporan kehilangan</b><p>Simpan IMEI/serial, waktu, lokasi terakhir, bukti pembelian, dan tangkapan layar lokasi.</p></div></label>
+        <label class="check-item"><input type="checkbox" data-step="safe" /><span class="box"></span><div><b>6. Jangan datangi lokasi berisiko sendirian</b><p>Jika lokasi muncul di tempat asing atau mencurigakan, utamakan keselamatan dan libatkan pihak berwajib.</p></div></label>
+      </div>
+    </section>
+
+    <section class="shell section report-card">
+      <div>
+        <span class="kicker">REPORT BUILDER</span>
+        <h2>Buat ringkasan laporan kehilangan</h2>
+        <p>Generator ini memakai data Device Vault dan menghasilkan teks yang bisa kamu salin atau simpan sebagai file.</p>
+      </div>
+      <div class="report-actions">
+        <button id="generateReport" class="primary-btn" type="button">Buat laporan</button>
+        <button id="downloadReport" class="secondary-btn" type="button" disabled>Simpan .txt</button>
+      </div>
+      <textarea id="reportOutput" rows="12" readonly placeholder="Laporan akan muncul di sini..."></textarea>
+    </section>
+  </main>
+
+  <footer class="shell footer">
+    <div><b>TemuinHP</b><span>Recovery Center</span></div>
+    <p>Bukan layanan operator dan tidak memiliki akses GPS perangkat. Gunakan hanya untuk perangkat milik sendiri atau dengan izin pemilik.</p>
+  </footer>
+
+  <dialog id="privacyDialog">
+    <form method="dialog" class="dialog-card">
+      <div class="dialog-head"><h2>Privasi</h2><button aria-label="Tutup">×</button></div>
+      <p>Semua data yang kamu isi di Device Vault disimpan dengan <code>localStorage</code> pada browser yang sedang kamu gunakan. Website ini tidak memiliki backend, akun pengguna, database, atau endpoint pelacakan.</p>
+      <p>Link Google, Apple, dan Samsung akan membuka situs resmi mereka di tab baru. Kredensial akun hanya boleh dimasukkan pada domain resmi tersebut.</p>
+      <button class="primary-btn" value="cancel">Mengerti</button>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>
