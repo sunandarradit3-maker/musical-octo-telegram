@@ -1,0 +1,74 @@
+name: Temporary Sentinel V2 APK Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-sentinel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout build host
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch Sentinel source branch
+        shell: bash
+        run: |
+          git fetch origin sentinel-v2-build-20260920
+          mkdir -p "$RUNNER_TEMP/sentinel-src"
+          git show origin/sentinel-v2-build-20260920:sentinel-build/Ditz-Sentinel-V2.0.0-alpha1-source.zip > "$RUNNER_TEMP/sentinel-source.zip"
+          unzip -q "$RUNNER_TEMP/sentinel-source.zip" -d "$RUNNER_TEMP/sentinel-src"
+          chmod +x "$RUNNER_TEMP/sentinel-src/tools/build-sdk.sh"
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android 36 build tools
+        shell: bash
+        run: |
+          yes | sdkmanager --licenses >/dev/null 2>&1 || true
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Generate temporary debug signing key
+        shell: bash
+        run: |
+          keytool -genkeypair -v             -keystore "$RUNNER_TEMP/sentinel-debug.keystore"             -storepass android             -keypass android             -alias sentineldebug             -keyalg RSA -keysize 2048 -validity 10000             -dname "CN=Ditz Sentinel Debug,O=Ditz Store,C=ID"
+
+      - name: Build installable APK
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP/sentinel-src"
+          export SDK_HOME="${ANDROID_SDK_ROOT:-$ANDROID_HOME}"
+          export SIGNING_KEYSTORE="$RUNNER_TEMP/sentinel-debug.keystore"
+          export SIGNING_ALIAS="sentineldebug"
+          printf 'android\nandroid\n' | ./tools/build-sdk.sh
+          cp build/manual/Ditz-Sentinel-V2.apk "$GITHUB_WORKSPACE/Ditz-Sentinel-V2.0.0-alpha1-debug.apk"
+
+      - name: Verify APK
+        shell: bash
+        run: |
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose --print-certs Ditz-Sentinel-V2.0.0-alpha1-debug.apk
+          sha256sum Ditz-Sentinel-V2.0.0-alpha1-debug.apk > Ditz-Sentinel-V2.0.0-alpha1-debug.apk.sha256
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ditz-Sentinel-V2.0.0-alpha1-debug
+          path: |
+            Ditz-Sentinel-V2.0.0-alpha1-debug.apk
+            Ditz-Sentinel-V2.0.0-alpha1-debug.apk.sha256
+          if-no-files-found: error
+          retention-days: 7
