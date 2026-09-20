@@ -75,3 +75,5 @@ jobs:
             Ditz-Sentinel-V2.0.0-alpha1-debug.apk.sha256
           if-no-files-found: error
           retention-days: 7
+
+# Sentinel source revision: f21ddb31cfa8ca6bbe17feb754b26a5623d67aaf
