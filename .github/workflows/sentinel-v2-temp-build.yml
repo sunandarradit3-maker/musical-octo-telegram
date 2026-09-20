@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build-sentinel:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - name: Checkout build host
@@ -22,25 +22,28 @@ jobs:
         shell: bash
         run: |
           git fetch origin sentinel-v2-build-20260920
+          rm -rf "$RUNNER_TEMP/sentinel-src"
           mkdir -p "$RUNNER_TEMP/sentinel-src"
           git show origin/sentinel-v2-build-20260920:sentinel-build/Ditz-Sentinel-V2.0.0-alpha1-source.zip > "$RUNNER_TEMP/sentinel-source.zip"
           unzip -q "$RUNNER_TEMP/sentinel-source.zip" -d "$RUNNER_TEMP/sentinel-src"
           chmod +x "$RUNNER_TEMP/sentinel-src/tools/build-sdk.sh"
 
       - name: Set up Java 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install Android 36 build tools
         shell: bash
         run: |
-          yes | sdkmanager --licenses >/dev/null 2>&1 || true
-          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          export ANDROID_HOME=/usr/local/lib/android/sdk
+          export ANDROID_SDK_ROOT=/usr/local/lib/android/sdk
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort | tail -1)"
+          test -x "$SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses >/dev/null 2>&1 || true
+          "$SDKMANAGER" "platforms;android-36" "build-tools;36.0.0"
 
       - name: Generate temporary debug signing key
         shell: bash
@@ -51,7 +54,7 @@ jobs:
         shell: bash
         run: |
           cd "$RUNNER_TEMP/sentinel-src"
-          export SDK_HOME="${ANDROID_SDK_ROOT:-$ANDROID_HOME}"
+          export SDK_HOME=/usr/local/lib/android/sdk
           export SIGNING_KEYSTORE="$RUNNER_TEMP/sentinel-debug.keystore"
           export SIGNING_ALIAS="sentineldebug"
           printf 'android\nandroid\n' | ./tools/build-sdk.sh
@@ -60,7 +63,7 @@ jobs:
       - name: Verify APK
         shell: bash
         run: |
-          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose --print-certs Ditz-Sentinel-V2.0.0-alpha1-debug.apk
+          /usr/local/lib/android/sdk/build-tools/36.0.0/apksigner verify --verbose --print-certs Ditz-Sentinel-V2.0.0-alpha1-debug.apk
           sha256sum Ditz-Sentinel-V2.0.0-alpha1-debug.apk > Ditz-Sentinel-V2.0.0-alpha1-debug.apk.sha256
 
       - name: Upload APK artifact
